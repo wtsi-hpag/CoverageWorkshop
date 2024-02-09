@@ -2,12 +2,13 @@ import deforest.node
 from tqdm import tqdm
 
 class Network:
-	LogDiploidPrior = -0.1
-	PermittedPloidies = [2,3,4]
-	LogJumpPrior = -50
-	JumpSize = 100000
+	
 	
 	def __init__(self,qmax,jump=50000):
+		self.LogDiploidPrior = -0.3
+		self.PermittedPloidies = [2,3,4]
+		self.LogJumpPrior = -50
+		self.Accelerate = 50
 		self.Q = qmax
 		self.JumpSize = jump
 
@@ -28,7 +29,7 @@ class Network:
 
 		nuMin = 0.2*data.Mean
 		nuMax = 0.6*data.Mean
-		accelerator = 50
+		accelerator = self.Accelerate
 		fullSize = len(data.Index)
 		reducedSize = int(fullSize/accelerator)
 
