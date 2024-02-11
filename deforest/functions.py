@@ -21,12 +21,39 @@ def dualBinomial(k,nu,gamma,sigma,sigma2):
 
 	else:
 		p1 = -9999999999
-		p1[k==0] = np.log(gamma)
+		if type[k] == type(0):
+			p1[k==0] = np.log(gamma)
 		# if k == 0:
 		# 	p1 =np.log(gamma)
 		# else:
 		# 	p1 = -99999999
 	
-	
 	p2 = np.log(1-gamma)-0.5* ((k-nu)*1.0/sigma2)**2
 	return ale(p1,p2)
+
+def loadUMAPData(umapfile):
+
+	load_x = []
+	load_y = []
+	names = []
+	with open(umapfile) as f:
+		for line in f:	
+			vals = line.rstrip().split(' ')
+			x = []
+			res = int(vals[0].split('_')[1])
+			name = vals[0]
+			
+			for i in range(2,len(vals)):
+				x.append(float(vals[i]))
+			# if x[-1] > 0:
+			# 	x = np.array(x)/x[-1]
+			load_x.append(x)
+			tag = int(vals[1])
+			load_y.append(tag)
+			names.append(name)
+	N = len(load_x)
+	# p = np.random.permutation(N)
+	load_x = np.array(load_x)
+	load_y = np.array(load_y)
+
+	return load_x,load_y,names
