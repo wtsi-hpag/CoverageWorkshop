@@ -1,5 +1,6 @@
 import numpy as np
 from scipy import special
+import deforest.data
 def ale(x,y):
 	return (np.maximum(x,y) + np.log(1 + np.exp(-np.abs(x-y))))
 
@@ -57,3 +58,9 @@ def loadUMAPData(umapfile):
 	load_y = np.array(load_y)
 
 	return load_x,load_y,names
+
+def GetEncoding(file,gap,distribution,resolution,mode):
+	s = deforest.DataStruct(file,0,5000)
+	N = deforest.Network(10,gap)
+	optimalPath = N.Navigate(s,distribution)
+	return optimalPath.Encode(s,N.JumpSize,mode,resolution)
