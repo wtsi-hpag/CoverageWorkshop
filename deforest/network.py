@@ -1,14 +1,15 @@
 import deforest.node
 from tqdm import tqdm
-
+import time
 class Network:
 	
 	
 	def __init__(self,qmax,jump=50000):
-		self.LogDiploidPrior = -0.3
+		self.LogDiploidPrior = -0.1
 		self.PermittedPloidies = [2,3,4]
 		self.LogJumpPrior = -50
 		self.Accelerate = 50
+		self.SearchResolution = 25
 		self.Q = qmax
 		self.JumpSize = jump
 
@@ -25,6 +26,7 @@ class Network:
 		return -0.5 * ((nu - meanNu/2)/sigma)**2
 
 	def Navigate(self,data,probabilityFunction):
+		startTime = time.time()
 		self.StartNode = deforest.node.Node(-1,0)
 
 		nuMin = 0.2*data.Mean
@@ -34,7 +36,7 @@ class Network:
 		reducedSize = int(fullSize/accelerator)
 
 		self.Resize(reducedSize)
-		res = 25
+		res = self.SearchResolution
 		self.nus = []
 		self.scores = []
 		self.UncorrectedScores = []
@@ -51,6 +53,8 @@ class Network:
 		self.Resize(fullSize)
 		r = self.NetworkPass(data,probabilityFunction,nu,1,True)
 		r.SetEnd(nu)
+		elapsedTime = time.time() - startTime
+		print(f"Navigation complete. {fullSize} nodes navigated in {elapsedTime} seconds.\nMaximum Score was {r.Score}")
 		return r
 
 	def NetworkPass(self,data,probabilityFunction,nu,scanSpeed,mode=False):

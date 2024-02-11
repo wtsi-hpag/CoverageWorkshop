@@ -7,10 +7,11 @@ class DataStruct:
 		cov = []
 		prev = -1
 		precov  =-1
-		dataGap = 1000
+		dataGap = False
 		# mem = 0.999
 		val = -1
 		lineCount = 0
+		# print("Skipping",skipper)
 		with open(filename) as file:
 			for line in file:
 				if lineCount == 0:
@@ -20,6 +21,8 @@ class DataStruct:
 					entries = line.rstrip().split(' ')
 					id = int(entries[1])
 					jump = id - prev
+					if prev != -1 and dataGap == False:
+						dataGap = id - prev
 					while prev != -1 and jump>dataGap:
 						# print(id,prev,jump)
 						prev+= dataGap
@@ -29,7 +32,7 @@ class DataStruct:
 						if prev % skipper == 0:
 							idx.append(prev)
 							cov.append(val)
-
+						lineCount +=1
 					# print(idx,prev,idx-prev)
 					redval = int(entries[2])
 					if redval > 300:
@@ -40,7 +43,6 @@ class DataStruct:
 						val = mem * val + (1.0 - mem) * redval
 					else:
 						val = redval
-
 					if id % skipper == 0:
 						idx.append(id)
 						cov.append(int(round(val)))
@@ -49,4 +51,3 @@ class DataStruct:
 				lineCount +=1
 		self.Index = np.array(idx).reshape((len(idx),))
 		self.Coverage = np.array(cov).reshape((len(idx),))
-		# self.Mean = np.mean(self.Coverage)

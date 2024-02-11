@@ -118,4 +118,8 @@ class Node:
 
 			# x.append()
 		# print(x)
-		return x
+		c = x.copy()
+		if mode not in ['diff']:
+			
+			c[1:] = np.diff(c)
+		return c
