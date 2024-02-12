@@ -64,5 +64,3 @@ def GetEncoding(file,gap,distribution,resolution,mode):
 	N = deforest.Network(10,gap)
 	optimalPath = N.Navigate(s,distribution)
 	return optimalPath.Encode(s,N.JumpSize,mode,resolution)
-
-
